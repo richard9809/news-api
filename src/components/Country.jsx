@@ -1,7 +1,8 @@
 // import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 
-export default function Country(){
+export default function Country(props){
     const codes = [
         {
             name: 'Afghanistan',
@@ -233,15 +234,27 @@ export default function Country(){
         },
     ];
 
+    const { onChange } = props;
+    const [selectedCountryCode, setSelectedCountryCode] = useState("US");
+
+    const handleChange = (event) => {
+        setSelectedCountryCode(event.target.value);
+        onChange(event);  // call the onChange prop with the event object
+    };
+
     return (
         <div>
             <div className="country-codes">
-                <h2>Search For Headlines In Countries</h2>
-                <div className="codes container">
-                    {codes.map(code => (
-                        <button className="country-code" key={code.code}>{code.name}</button>
-                    ))}
-                </div>
+                <h2>
+                    Top Headlines In 
+                    <select value={selectedCountryCode} onChange={handleChange}>
+                        {codes.map((code) => (
+                            <option key={code.code} value={code.code}>
+                            {code.name}
+                            </option>
+                        ))}
+                    </select>
+                </h2>
             </div>
         </div>
     );

@@ -1,5 +1,7 @@
+import LikedPosts from "../components/LikedPosts";
+
 export default function Favorites(){
     return(
-        <div>Favorites</div>
+        <LikedPosts />
     )
 }

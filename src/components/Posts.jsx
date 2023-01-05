@@ -1,8 +1,21 @@
 import { useEffect, useState } from "react";
 import { NEWS_API_URL, NEWS_API_KEY } from "../api.js";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+library.add(faHeart);
 
 function Posts(){
     const [news, setNews] = useState(null);
+    const [clicked, setClicked] = useState([]);
+    const [likedArticles, setLikedArticles] = useState([]);
+
+    const likeArticle = (article, index) => {
+        setLikedArticles([...likedArticles, article]);
+        setClicked([...clicked, index]);
+        localStorage.setItem("likedArticles", JSON.stringify([...likedArticles, article]));
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -13,10 +26,13 @@ function Posts(){
         fetchData();
       }, []); // this second argument makes the effect only run once
 
+    
+    
+
     return(
         <div className="posts">
             {news ? (
-                news.articles.map(article => (
+                news.articles.map((article, index) => (
                     <div key={article.url} className="post">
                         <img src={article.urlToImage} alt="" />
                         <div className="post-content">
@@ -28,6 +44,9 @@ function Posts(){
                                 </a>
                             </div>
                             <div className="more-info">
+                                <button className={`like-button ${clicked.includes(index) ? "clicked" : ""}`} onClick={() => likeArticle(article, index)}>
+                                    <FontAwesomeIcon icon={faHeart} className="fa-2x fa-thin" />
+                                </button>
                                 <div className="post-date">{article.publishedAt}</div>
                                 <div className="post-author">{article.author}</div>
                             </div>
